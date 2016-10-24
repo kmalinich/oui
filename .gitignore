@@ -3,4 +3,5 @@
 *.tar.bz2
 .DS_Store
 ._*
+db.json
 node_modules/
