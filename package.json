@@ -32,10 +32,8 @@
     "char-spinner"          : "^1.0.1",
     "country-data"          : "0.0.24",
     "get-stdin"             : "^5.0.1",
-    "got"                   : "^6.3.0",
     "json-stable-stringify" : "^1.0.1",
     "pinkie-promise"        : "^2.0.1",
-    "tunnel"                : "0.0.4",
-    "url"                   : "0.11.0"
+    "request"               : "2.75.0"
   }
 }
