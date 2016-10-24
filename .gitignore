@@ -1,1 +1,6 @@
+*.swo
+*.swp
+*.tar.bz2
+.DS_Store
+._*
 node_modules/

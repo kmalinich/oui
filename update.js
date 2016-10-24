@@ -1,28 +1,77 @@
 #!/usr/bin/env node
 "use strict";
 
-var fs        = require("fs");
-var got       = require("got");
-var stringify = require("json-stable-stringify");
-var dbPath    = require("path").join(__dirname, "db.json");
-var countries = require("country-data").countries;
-var source    = "http://standards.ieee.org/develop/regauth/oui/oui.txt";
+var fs        = require('fs');
+var got       = require('got');
+var stringify = require('json-stable-stringify');
+var dbPath    = require('path').join(__dirname, 'db.json');
+var countries = require('country-data').countries;
+
+var http   = require('http');
+var tunnel = require('tunnel');
+var url    = require('url');
+
+// IEEE database URL
+var source = 'http://standards-oui.ieee.org/oui/oui.txt';
 
 module.exports = function update(isCLI, cb) {
-  got(source).catch(cb).then(function(res) {
+  var req_options = {};
+
+  // If a proxy envirionment variable is detected, parse it and add the appropriate options 
+  if (process.env.proxy !== 'undefined' && process.env.proxy) {
+    var proxy_url_object = url.parse(process.env.proxy);
+
+    process.stdout.write([
+      'Using proxy host \''+proxy_url_object.hostname+'\', port \''+proxy_url_object.port+'\'.\n',
+    ].join("\n"));
+
+    req_options = {
+      host   : proxy_url_object.hostname,
+      port   : proxy_url_object.port,
+      method : 'GET',
+      path   : source // Full URL as path when using a proxy
+    };
+  }
+  else {
+    // No proxy
+    var source_url_object = url.parse(source);
+    console.log(source_url_object);
+
+    req_options = {
+      host   : source_url_object.hostname,  
+      port   : 80,
+      method : 'GET',
+      path   :  // Full URL as path when using a proxy
+    };
+  }
+
+  console.log(req_options);
+
+  // var req = http.request(req_options, function (res) {
+  // 	res.on('data', function (data) {
+  // 		console.log(data.toString());
+  // 	});
+  // });
+
+  var req = http.request(req_options).catch(cb).then(function(res) {
     parse(res.body.split("\n"), function(result) {
+
       var str = stringify(result, {space: 1, cmp: function(a, b) {
         return parseInt(a.key, 16) > parseInt(b.key, 16) ? 1 : -1;
       }});
+
       if (!isCLI) {
         cb(null, result);
         fs.writeFile(dbPath, str);
-      } else {
+      }
+      else {
         fs.writeFile(dbPath, str, cb);
       }
     });
   });
-};
+
+  req.end();
+}
 
 function isStart(firstLine, secondLine) {
   if (firstLine === undefined || secondLine === undefined) return false;
@@ -31,6 +80,7 @@ function isStart(firstLine, secondLine) {
 
 function parse(lines, cb) {
   var result = {}, i = 3;
+
   while (i !== lines.length) {
     if (isStart(lines[i], lines[i + 1])) {
       var oui   = lines[i + 2].substring(0, 6).trim();
@@ -57,5 +107,6 @@ function parse(lines, cb) {
       result[oui] = owner;
     }
   }
+
   if (cb) cb(result);
 }

@@ -1,11 +1,11 @@
 {
-  "name": "oui",
-  "version": "4.4.9",
-  "author": "silverwind <me@silverwind.io>",
-  "description": "Look up MAC addresses for their vendor in the IEEE OUI database",
-  "repository": "silverwind/oui",
-  "license": "BSD-2-Clause",
-  "keywords": [
+  "name"        : "oui",
+  "version"     : "4.4.9",
+  "author"      : "silverwind <me@silverwind.io>",
+  "description" : "Look up MAC addresses for their vendor in the IEEE OUI database",
+  "repository"  : "silverwind/oui",
+  "license"     : "BSD-2-Clause",
+  "keywords"    : [
     "mac",
     "address",
     "mac address",
@@ -16,11 +16,11 @@
     "hardware",
     "organizationally unique identifier"
   ],
-  "bin": {
-    "oui": "oui.js"
+  "bin" : {
+    "oui" : "oui.js"
   },
-  "engines": {
-    "node": ">=0.10.0"
+  "engines" : {
+    "node" : ">=0.10.0"
   },
   "files": [
     "index.js",
@@ -29,11 +29,13 @@
     "db.json"
   ],
   "dependencies": {
-    "char-spinner": "^1.0.1",
-    "country-data": "0.0.24",
-    "get-stdin": "^5.0.1",
-    "got": "^6.3.0",
-    "json-stable-stringify": "^1.0.1",
-    "pinkie-promise": "^2.0.1"
+    "char-spinner"          : "^1.0.1",
+    "country-data"          : "0.0.24",
+    "get-stdin"             : "^5.0.1",
+    "got"                   : "^6.3.0",
+    "json-stable-stringify" : "^1.0.1",
+    "pinkie-promise"        : "^2.0.1",
+    "tunnel"                : "0.0.4",
+    "url"                   : "0.11.0"
   }
 }
